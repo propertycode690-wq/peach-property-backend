@@ -59,7 +59,8 @@ CREATE TABLE `property_types` (
 
 INSERT INTO `property_types` (`name`) VALUES
   ('Apartment'), ('Air BnB'), ('Private Room'),
-  ('House'), ('Townhouse'), ('Office Space');
+  ('House'), ('Townhouse'), ('Office Space'),
+  ('Commercial Property');
 
 
 -- 2. Maintenance Categories

@@ -39,7 +39,7 @@ const createInvoice = async (req, res) => {
         const [tenant] = await pool.query('SELECT full_name, email, phone FROM tenants WHERE id = ?', [tenant_id]);
         if (tenant.length > 0) {
             const t = tenant[0];
-            const msg = `Hello ${t.full_name}, a new invoice #${invoice_number} for ${invoiceType} has been generated. Amount: USD $${fmtAmt(amount)}. Due Date: ${due_date}. Please settle by the due date.`;
+            const msg = `Hello ${t.full_name}, a new invoice #${invoice_number} for ${invoiceType} has been generated. Amount: EUR €${fmtAmt(amount)}. Due Date: ${due_date}. Please settle by the due date.`;
 
             if (t.email) sendEmail(t.email, `New Invoice Issued - #${invoice_number}`, `<h1>New Invoice</h1><p>${msg}</p>`);
             if (t.phone) sendSMS(t.phone, msg);
@@ -50,7 +50,7 @@ const createInvoice = async (req, res) => {
         createNotification({
             type: 'invoice',
             title: 'New Invoice Issued',
-            message: `Invoice #${invoice_number} for £${fmtAmt(amount)} generated (${invoiceType})`,
+            message: `Invoice #${invoice_number} for EUR €${fmtAmt(amount)} generated (${invoiceType})`,
             link: '/admin/invoices',
             user_id: null
         }).catch(e => console.error('[NOTIF ERROR]', e.message));
@@ -104,7 +104,7 @@ const updateInvoice = async (req, res) => {
             createNotification({
                 type: 'payment',
                 title: status === 'Paid' ? 'Lease Payment Received' : 'Partial Payment Received',
-                message: `Payment of £${fmtAmt(incrementalAmt)} recorded for Invoice #${oldInv[0].invoice_number}`,
+                message: `Payment of EUR €${fmtAmt(incrementalAmt)} recorded for Invoice #${oldInv[0].invoice_number}`,
                 link: '/admin/invoices',
                 user_id: null
             }).catch(e => console.error('[NOTIF ERROR]', e.message));
@@ -140,7 +140,7 @@ const sendInvoiceNotification = async (req, res) => {
         if (rows.length === 0) return res.status(404).json({ success: false, message: 'Invoice not found' });
 
         const inv = rows[0];
-        const msg = `Reminder: Invoice #${inv.invoice_number} is ${inv.status}. Amount: USD $${fmtAmt(inv.amount)}. Due Date: ${inv.due_date}. Please pay to avoid late fees.`;
+        const msg = `Reminder: Invoice #${inv.invoice_number} is ${inv.status}. Amount: EUR €${fmtAmt(inv.amount)}. Due Date: ${inv.due_date}. Please pay to avoid late fees.`;
 
         let emailSent = false, smsSent = false;
         if (inv.email) {

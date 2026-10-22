@@ -59,7 +59,7 @@ const createLease = async (req, res) => {
         createNotification({
             type: 'lease',
             title: 'New Lease Agreement',
-            message: `Lease created with monthly rent of £${Number(monthly_rent || 0).toLocaleString()}`,
+            message: `Lease created with monthly rent of EUR €${Number(monthly_rent || 0).toLocaleString()}`,
             link: '/admin/leases',
             user_id: null
         }).catch(e => console.error('[NOTIF ERROR]', e.message));

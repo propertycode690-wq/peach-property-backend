@@ -19,9 +19,30 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev')); // Logger
 
 // CORS setup - IMPORTANT for Railway Frontend connection
+const allowedOrigins = [
+    'https://property-portfolio-manage.netlify.app',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || '*',
+    origin: function (origin, callback) {
+        // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+        if (!origin) return callback(null, true);
+
+        const cleanOrigin = origin.replace(/\/$/, '');
+        const isAllowed = allowedOrigins.some(item => item.replace(/\/$/, '') === cleanOrigin);
+
+        if (isAllowed) {
+            callback(null, true);
+        } else {
+            callback(null, false);
+        }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 
 // Setup static file serving for Uploads

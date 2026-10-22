@@ -87,7 +87,7 @@ const initNotificationsTable = async () => {
                             [
                                 'payment',
                                 'Lease Payment Received',
-                                `Payment of £${amountFormatted} confirmed for ${inv.invoice_number}${inv.tenant_name ? ` (${inv.tenant_name})` : ''}`,
+                                `Payment of EUR €${amountFormatted} confirmed for ${inv.invoice_number}${inv.tenant_name ? ` (${inv.tenant_name})` : ''}`,
                                 '/admin/invoices',
                                 0,
                                 inv.paid_date || inv.created_at || new Date()
@@ -99,7 +99,7 @@ const initNotificationsTable = async () => {
                             [
                                 'invoice',
                                 `Invoice Overdue: #${inv.invoice_number}`,
-                                `Overdue amount £${amountFormatted} for ${inv.tenant_name || 'Tenant'}`,
+                                `Overdue amount EUR €${amountFormatted} for ${inv.tenant_name || 'Tenant'}`,
                                 '/admin/invoices',
                                 0,
                                 inv.created_at || new Date()
@@ -111,7 +111,7 @@ const initNotificationsTable = async () => {
                             [
                                 'invoice',
                                 `New Invoice Generated: #${inv.invoice_number}`,
-                                `Invoice of £${amountFormatted} issued for ${inv.tenant_name || 'Tenant'}`,
+                                `Invoice of EUR €${amountFormatted} issued for ${inv.tenant_name || 'Tenant'}`,
                                 '/admin/invoices',
                                 0,
                                 inv.created_at || new Date()

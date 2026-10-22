@@ -120,7 +120,7 @@ const runDailyReminders = async () => {
                             <p>Dear <strong>${lease.full_name}</strong>,</p>
                             <p>Your lease for <strong>${lease.property_name}</strong> will expire in 
                                <strong>${threshold} days</strong> on <strong>${lease.end_date}</strong>.</p>
-                            <p>Monthly Rent: <strong>£${Number(lease.monthly_rent).toLocaleString()}</strong></p>
+                            <p>Monthly Rent: <strong>EUR €${Number(lease.monthly_rent).toLocaleString()}</strong></p>
                             <p>Please contact your landlord to discuss renewal options.</p>
                             <br><p>Property & Lease</p>
                         `;
@@ -180,11 +180,11 @@ const runDailyReminders = async () => {
                                 <p>A rent review for your tenancy at <strong>${lease.property_name}</strong> 
                                    is scheduled in <strong>${threshold} days</strong> on 
                                    <strong>${lease.rent_review_date}</strong>.</p>
-                                <p>Current Monthly Rent: <strong>£${Number(lease.monthly_rent).toLocaleString()}</strong></p>
+                                <p>Current Monthly Rent: <strong>EUR €${Number(lease.monthly_rent).toLocaleString()}</strong></p>
                                 <p>Your landlord will be in touch regarding any adjustments.</p>
                                 <br><p>Property & Lease</p>
                             `;
-                            const sms = `RENT REVIEW: Your rent review at ${lease.property_name} is in ${threshold} days (${lease.rent_review_date}). Current rent: £${Number(lease.monthly_rent).toLocaleString()}.`;
+                            const sms = `RENT REVIEW: Your rent review at ${lease.property_name} is in ${threshold} days (${lease.rent_review_date}). Current rent: EUR €${Number(lease.monthly_rent).toLocaleString()}.`;
                             await notify(settings, lease.email, lease.phone, subject, html, sms);
                             await markReminderSent('rent_review', lease.id, threshold, lease.email);
                             processed++;
