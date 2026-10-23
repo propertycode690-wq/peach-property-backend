@@ -191,6 +191,7 @@ CREATE TABLE `properties` (
     COMMENT 'Primary image path',
   `images`      JSON         DEFAULT NULL
     COMMENT 'JSON array of all image paths',
+  `notes`       text         DEFAULT NULL,
   `added_by`    int(11)      DEFAULT NULL,
   `created_at`  timestamp    NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
@@ -214,6 +215,7 @@ CREATE TABLE `tenants` (
   `status`       enum('Active','Inactive') DEFAULT 'Active',
   `id_document`  varchar(255) DEFAULT NULL
     COMMENT 'Path to ID document upload',
+  `notes`        text         DEFAULT NULL,
   `added_by`     int(11)      DEFAULT NULL,
   `created_at`   timestamp    NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),

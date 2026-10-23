@@ -19,12 +19,12 @@ const getTenants = async (req, res) => {
 
 // @desc    Add Tenant
 const createTenant = async (req, res) => {
-    const { full_name, email, phone, property_id, unit_number, move_in_date, status } = req.body;
+    const { full_name, email, phone, property_id, unit_number, move_in_date, status, notes } = req.body;
     const document = req.file ? `/uploads/${req.file.filename}` : null;
     try {
         const [result] = await pool.query(
-            'INSERT INTO tenants (full_name, email, phone, property_id, unit_number, move_in_date, status, id_document, added_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [full_name, email, phone, property_id, unit_number, move_in_date, status, document, req.user.id]
+            'INSERT INTO tenants (full_name, email, phone, property_id, unit_number, move_in_date, status, id_document, notes, added_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [full_name, email, phone, property_id, unit_number, move_in_date, status, document, notes || null, req.user.id]
         );
 
         // Dynamic system notification
@@ -46,10 +46,14 @@ const createTenant = async (req, res) => {
 // @desc    Update Tenant
 const updateTenant = async (req, res) => {
     const { id } = req.params;
-    const { full_name, email, phone, property_id, unit_number, move_in_date, status } = req.body;
+    const { full_name, email, phone, property_id, unit_number, move_in_date, status, notes } = req.body;
     try {
         let query = 'UPDATE tenants SET full_name=?, email=?, phone=?, property_id=?, unit_number=?, move_in_date=?, status=?';
         let params = [full_name, email, phone, property_id, unit_number, move_in_date, status];
+        if (notes !== undefined) {
+            query += ', notes=?';
+            params.push(notes || null);
+        }
         if (req.file) {
             query += ', id_document=?';
             params.push(`/uploads/${req.file.filename}`);

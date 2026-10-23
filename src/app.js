@@ -18,11 +18,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev')); // Logger
 
-// CORS setup - IMPORTANT for Railway Frontend connection
+// CORS setup - Local Development URLs (Active)
 const allowedOrigins = [
-    'https://property-portfolio-manage.netlify.app',
+    // Live Production Frontend URL (Commented)
+    // 'https://property-portfolio-manage.netlify.app',
+    // Local Development URLs (Active)
     'http://localhost:5173',
+    'http://localhost:5174',
     'http://localhost:3000',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:5174',
+    'http://127.0.0.1:3000',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 

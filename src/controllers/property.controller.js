@@ -21,7 +21,7 @@ const getProperties = async (req, res) => {
 
 // @desc    Add Property
 const createProperty = async (req, res) => {
-    const { name, address, city, state, zip_code, type, total_units, status } = req.body;
+    const { name, address, city, state, zip_code, type, total_units, status, notes } = req.body;
     let image = null;
     let imagesArr = [];
     if (req.files && req.files.length > 0) {
@@ -31,8 +31,8 @@ const createProperty = async (req, res) => {
     const imagesStr = JSON.stringify(imagesArr);
     try {
         const [result] = await pool.query(
-            'INSERT INTO properties (name, address, city, state, zip_code, type, total_units, status, image, images, added_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [name, address, city, state, zip_code, type, total_units, status, image, imagesStr, req.user.id]
+            'INSERT INTO properties (name, address, city, state, zip_code, type, total_units, status, notes, image, images, added_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [name, address, city, state, zip_code, type, total_units, status, notes || null, image, imagesStr, req.user.id]
         );
         await pool.query('INSERT INTO activity_logs (action, details, user_id) VALUES (?, ?, ?)',
             ['Create Property', `Added property: ${name}`, req.user.id]);
@@ -56,7 +56,7 @@ const createProperty = async (req, res) => {
 // @desc    Update Property
 const updateProperty = async (req, res) => {
     const { id } = req.params;
-    const { name, address, city, state, zip_code, type, total_units, status } = req.body;
+    const { name, address, city, state, zip_code, type, total_units, status, notes } = req.body;
 
     // existing_images could be a string (from single existing image logic) or array of strings, or undefined
     let existingImages = req.body.existing_images || [];
@@ -69,6 +69,11 @@ const updateProperty = async (req, res) => {
     try {
         let query = 'UPDATE properties SET name=?, address=?, city=?, state=?, zip_code=?, type=?, total_units=?, status=?';
         let params = [name, address, city, state, zip_code, type, total_units, status];
+
+        if (notes !== undefined) {
+            query += ', notes=?';
+            params.push(notes || null);
+        }
 
         let newImages = [];
         if (req.files && req.files.length > 0) {
